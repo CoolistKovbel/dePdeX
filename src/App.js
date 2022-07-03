@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ether } from "ethers";
 
+import "./App.css";
+
 function App() {
   const [current, setAccount] = useState("");
 
@@ -67,30 +69,60 @@ function App() {
     <div className="currentBlock">
       {current.length > 0 ? (
         <div className="yesAccount">
-          <h1>Hello World</h1>
-          <code>Account:{current}</code>
+          <header className="blockAccount">
+            <h1>PdeX</h1>
+            <ul>
+              <li>MyAccount</li>
+              <li>Account:{current}</li>
+            </ul>
+          </header>
 
           {/* Join OR Create Group */}
 
           <div className="createGroup">
-            <div>
+            <div className="container">
               <h2>List of Groups</h2>
               <ul>
-                <li>Group: 1</li>
-                <li>Group: 2</li>
-                <li>Group: 3</li>
+                <li>
+                  <div className="group">
+                    <div className="groupImgContainer">
+                      <img src="https://via.placeholder.com/100" />
+                    </div>
+                    <h5>Group 1</h5>
+                  </div>
+                </li>
+                <li>
+                  <div className="group">
+                    <div className="groupImgContainer">
+                      <img src="https://via.placeholder.com/100" />
+                    </div>
+                    <h5>Group 2</h5>
+                  </div>
+                </li>
+                <li>
+                  <div className="group">
+                    <div className="groupImgContainer">
+                      <img src="https://via.placeholder.com/100" />
+                    </div>
+                    <h5>Group 3</h5>
+                  </div>
+                </li>
               </ul>
               <h2>CreateGroup</h2>
               <form>
-                <label style={{ display: "block" }}>
+                <label>
                   {" "}
                   Group Name
-                  <input type="text" placeholder="Group Name" />
+                  <input type="text" placeholder="Group Name" id="groupName" />
                 </label>
-                <label style={{ display: "block" }}>
+                <label>
                   {" "}
                   Group Logo
-                  <input type="text" placeholder="enter image URl" />
+                  <input
+                    type="text"
+                    placeholder="enter image URl"
+                    id="groupLogo"
+                  />
                 </label>
                 <button onClick={createGroup}>Create</button>
               </form>
@@ -100,18 +132,22 @@ function App() {
           {/* Send Messages */}
 
           <div className="Send Messages">
-            <h2>List of Messages</h2>
-            <ul>
-              <li>Message 1</li>
-              <li>Message 2</li>
-              <li>Message 3</li>
-            </ul>
-            <h2>Create Message</h2>
-            <form>
-              <label style={{ display: "block" }}>Message</label>
-              <textarea></textarea>
-              <button onClick={sendMessage}>Send Message</button>
-            </form>
+            <div className="container">
+              <h2>List of Messages</h2>
+              <ul>
+                <li>Message 1</li>
+                <li>Message 2</li>
+                <li>Message 3</li>
+              </ul>
+              <h2>Create Message</h2>
+              <form>
+                <label htmlFor="message" style={{ display: "block" }}>
+                  Message
+                </label>
+                <textarea id="message"></textarea>
+                <button onClick={sendMessage}>Send Message</button>
+              </form>
+            </div>
           </div>
         </div>
       ) : (

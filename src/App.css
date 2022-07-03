@@ -1,38 +1,73 @@
-.App {
+/* classes */
+.container {}
+
+.currentBlock {
+  background-color: #D3C1D2;
+  color: #273C2C;
+}
+
+.yesAccount,
+.noAccount {
+  padding: 10px;
+  width: 95%;
+  margin: 0 auto;
+  border: #273C2C 5px solid;
+}
+
+/* Header */
+.blockAccount {
+  background-color: #273C2C;
+  color: #FFE2FE;
+  padding: 5px;
+}
+
+.blockAccount h1 {
+  text-align: center;
+  font-size: 2.5rem;
+}
+
+.blockAccount ul {
+  list-style-type: none;
+  background-color: #626868;
+  font-size: 12px;
+}
+
+/* Group section */
+.createGroup {
+  color: #FFE2FE;
+  background-color: #626868;
+  padding: 5px;
+}
+
+.createGroup h2 {
+  text-align: center;
+  text-transform: uppercase;
+  padding: 2.5px;
+}
+
+.createGroup ul {
+  list-style-type: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.createGroup ul li {
+  margin-right: 2.5px;
+}
+
+.createGroup .groupImgContainer {
+  border: 2px solid #D3C1D2;
+  box-shadow: inset 30px 30px 30px rgba(0, 0, 0, .5);
+}
+
+.createGroup ul li h5 {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.createGroup form {
+  width: 100%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+/* .createGroup form  */
