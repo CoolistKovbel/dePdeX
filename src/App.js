@@ -81,7 +81,7 @@ function App() {
 
           <div className="createGroup">
             <div className="container">
-              <h2>List of Groups</h2>
+              <h2 className="groupHeadings">List of Groups</h2>
               <ul>
                 <li>
                   <div className="group">
@@ -108,7 +108,7 @@ function App() {
                   </div>
                 </li>
               </ul>
-              <h2>CreateGroup</h2>
+              <h2 className="groupHeadings">CreateGroup</h2>
               <form>
                 <label>
                   {" "}
@@ -131,19 +131,17 @@ function App() {
 
           {/* Send Messages */}
 
-          <div className="Send Messages">
+          <div className="sendMessages">
             <div className="container">
-              <h2>List of Messages</h2>
+              <h2 className="groupHeadings">List of Messages</h2>
               <ul>
                 <li>Message 1</li>
                 <li>Message 2</li>
                 <li>Message 3</li>
               </ul>
-              <h2>Create Message</h2>
+              <h2 className="groupHeadings">Create Message</h2>
               <form>
-                <label htmlFor="message" style={{ display: "block" }}>
-                  Message
-                </label>
+                <label htmlFor="message">Message:</label>
                 <textarea id="message"></textarea>
                 <button onClick={sendMessage}>Send Message</button>
               </form>
