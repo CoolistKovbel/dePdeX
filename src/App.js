@@ -49,6 +49,11 @@ function App() {
     }
   };
 
+  const createGroup = (e) => {
+    e.preventDefault();
+    console.log("Group created");
+  };
+
   useEffect(() => {
     checkIfWalletIsConnect();
   }, []);
@@ -61,6 +66,31 @@ function App() {
           <code>Account:{current}</code>
 
           {/* Join OR Create Group */}
+
+          <div className="createGroup">
+            <div>
+              <h2>List of Groups</h2>
+              <ul>
+                <li>Group: 1</li>
+                <li>Group: 2</li>
+                <li>Group: 3</li>
+              </ul>
+              <h2>CreateGroup</h2>
+              <form>
+                <label style={{ display: "block" }}>
+                  {" "}
+                  Group Name
+                  <input type="text" placeholder="Group Name" />
+                </label>
+                <label style={{ display: "block" }}>
+                  {" "}
+                  Group Logo
+                  <input type="text" placeholder="enter image URl" />
+                </label>
+                <button onClick={createGroup}>Create</button>
+              </form>
+            </div>
+          </div>
 
           {/* Send Messages */}
         </div>
