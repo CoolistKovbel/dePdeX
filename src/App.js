@@ -54,6 +54,11 @@ function App() {
     console.log("Group created");
   };
 
+  const sendMessage = (e) => {
+    e.preventDefault();
+    console.log("Message sent");
+  };
+
   useEffect(() => {
     checkIfWalletIsConnect();
   }, []);
@@ -93,6 +98,21 @@ function App() {
           </div>
 
           {/* Send Messages */}
+
+          <div className="Send Messages">
+            <h2>List of Messages</h2>
+            <ul>
+              <li>Message 1</li>
+              <li>Message 2</li>
+              <li>Message 3</li>
+            </ul>
+            <h2>Create Message</h2>
+            <form>
+              <label style={{ display: "block" }}>Message</label>
+              <textarea></textarea>
+              <button onClick={sendMessage}>Send Message</button>
+            </form>
+          </div>
         </div>
       ) : (
         <div className="noAccount">

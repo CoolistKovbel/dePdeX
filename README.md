@@ -1,5 +1,10 @@
 # PdeX
 
+- Personal
+- Decentralized
+- Exchange
+- Xtreme
+
 ---
 
 ## What is this
