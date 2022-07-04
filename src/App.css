@@ -15,9 +15,66 @@
 .yesAccount,
 .noAccount {
   padding: 10px;
-  width: 95%;
+  width: 100%;
+  height: 100vh;
   margin: 0 auto;
-  border: #273C2C 5px solid;
+  border: #273C2C 10px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.yesAccount {
+  height: auto;
+}
+
+.noAccount .App-header {
+  text-align: center;
+  font-size: 2rem;
+  font-family: Arial, sans-serif;
+}
+
+.noAccount .hero {
+  background-image: url('https://i.giphy.com/media/l41lS3Qhf9jq83hm0/giphy.webp');
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #FFE2FE;
+  flex-direction: column;
+  font-size: 2rem;
+  text-transform: capitalize;
+  font-weight: bold;
+}
+
+.noAccount .hero p {
+  background-color: #626868;
+  padding: 2.5px;
+  box-shadow: inset 20px 20px 20px 20px rgba(64, 62, 64, 0.149);
+}
+
+.noAccount .hero button {
+  padding: 10px;
+  margin-top: 20px;
+  border-radius: 10px;
+  font-family: monospace;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  background-color: #D3C1D2;
+  border: 2px solid #FFE2FE;
+}
+
+.noAccount .hero button:hover {
+  background-color: #626868;
+  color: #FFE2FE;
+}
+
+.noAccount footer {
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
 }
 
 /* Header */
@@ -25,6 +82,7 @@
   background-color: #273C2C;
   color: #FFE2FE;
   padding: 5px;
+  width: 100%;
 }
 
 .blockAccount h1 {
@@ -36,6 +94,7 @@
   list-style-type: none;
   background-color: #626868;
   font-size: 12px;
+  padding: 2.5px;
 }
 
 
@@ -44,6 +103,7 @@
   color: #FFE2FE;
   background-color: #626868;
   padding: 5px;
+  width: 100%;
 }
 
 /* Group section */
@@ -52,7 +112,7 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .createGroup ul li {

@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { ether } from "ethers";
+import { ethers } from "ethers";
 
 import "./App.css";
+import abi from "./utils/PdeX.json";
 
 function App() {
   const [current, setAccount] = useState("");
+  const [groupName, setGroupName] = useState("");
+  const [groupLogo, setGroupLogo] = useState("");
+  const [message, setMessage] = useState();
+  const [messageData, setMessageData] = useState([]);
+  const [messageWait, setMessageWait] = useState(false);
+
+  const contractAddress = "0xC10D144F8cC989Be41cCC99E160F6713E9130301";
 
   const checkIfWalletIsConnect = async () => {
     try {
@@ -23,6 +31,8 @@ function App() {
         const account = accounts[0];
         console.log("Found account", account);
         setAccount(account);
+        // Get Message DB
+        getAllMessage();
       } else {
         console.log("Nothing found");
       }
@@ -46,6 +56,7 @@ function App() {
 
       console.log(accounts);
       setAccount(accounts[0]);
+      getAllMessage();
     } catch (error) {
       console.log(error);
     }
@@ -56,9 +67,72 @@ function App() {
     console.log("Group created");
   };
 
-  const sendMessage = (e) => {
+  const sendMessage = async (e) => {
     e.preventDefault();
-    console.log("Message sent");
+    try {
+      const { ethereum } = window;
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const PdeXContract = new ethers.Contract(
+          contractAddress,
+          abi.abi,
+          signer
+        );
+
+        let deMessage = await PdeXContract.createMessage(message);
+        console.log("waiting");
+        await deMessage.wait();
+        console.log("Done");
+
+        console.log("Message sent");
+        setMessage("");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onChange = (e) => {
+    const { value, name } = e.target;
+    if (name === "groupName") {
+      setGroupName(value);
+    } else if (name === "groupLogo") {
+      setGroupLogo(value);
+    } else if (name === "message") {
+      setMessage(value);
+    }
+  };
+
+  const getAllMessage = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const PdeXContract = new ethers.Contract(
+          contractAddress,
+          abi.abi,
+          signer
+        );
+
+        let data = await PdeXContract.getAllMessages();
+
+        // console.log(`There is ${data.length}, something like: ${data}`);
+
+        let cleanMessages = [];
+        data.forEach((item) => {
+          cleanMessages.push({
+            message: item.message,
+            address: item.owner,
+          });
+        });
+        setMessageData(cleanMessages);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -113,7 +187,13 @@ function App() {
                 <label>
                   {" "}
                   Group Name
-                  <input type="text" placeholder="Group Name" id="groupName" />
+                  <input
+                    type="text"
+                    placeholder="Group Name"
+                    id="groupName"
+                    name="groupName"
+                    onChange={onChange}
+                  />
                 </label>
                 <label>
                   {" "}
@@ -122,6 +202,8 @@ function App() {
                     type="text"
                     placeholder="enter image URl"
                     id="groupLogo"
+                    name="groupLogo"
+                    onChange={onChange}
                   />
                 </label>
                 <button onClick={createGroup}>Create</button>
@@ -135,14 +217,28 @@ function App() {
             <div className="container">
               <h2 className="groupHeadings">List of Messages</h2>
               <ul>
-                <li>Message 1</li>
-                <li>Message 2</li>
-                <li>Message 3</li>
+                {messageData.length > 0
+                  ? messageData.map((item) => (
+                      <li>
+                        {item.message} <span>{item.address}</span>
+                      </li>
+                    ))
+                  : "There is no messages"}
               </ul>
               <h2 className="groupHeadings">Create Message</h2>
               <form>
                 <label htmlFor="message">Message:</label>
-                <textarea id="message"></textarea>
+                {!messageWait ? (
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={message}
+                    onChange={onChange}
+                  ></textarea>
+                ) : (
+                  "Waiting"
+                )}
+
                 <button onClick={sendMessage}>Send Message</button>
               </form>
             </div>
