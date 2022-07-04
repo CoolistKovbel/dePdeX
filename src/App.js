@@ -36,7 +36,6 @@ function App() {
         getAllMessage();
         // Get Group DB
         getAllGroups();
-        console.log(groupData);
       } else {
         console.log("Nothing found");
       }
@@ -60,9 +59,10 @@ function App() {
 
       console.log(accounts);
       setAccount(accounts[0]);
+      // Get Message DB
       getAllMessage();
+      // Get Group DB
       getAllGroups();
-      console.log(groupData);
     } catch (error) {
       console.log(error);
     }
@@ -203,6 +203,38 @@ function App() {
 
   useEffect(() => {
     checkIfWalletIsConnect();
+  }, []);
+
+  /**
+   * Listen in for emitter events!
+   */
+  useEffect(() => {
+    let PdexContract;
+
+    const onMessage = (message, from) => {
+      console.log("NewMessage", from, message);
+      setMessageData((prevState) => [
+        ...prevState,
+        {
+          message: message,
+          address: from,
+        },
+      ]);
+    };
+
+    if (window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+
+      PdexContract = new ethers.Contract(contractAddress, abi.abi, signer);
+      PdexContract.on("newMessage", onMessage);
+    }
+
+    return () => {
+      if (PdexContract) {
+        PdexContract.off("newMessage", onMessage);
+      }
+    };
   }, []);
 
   return (
