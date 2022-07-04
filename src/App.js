@@ -13,7 +13,7 @@ function App() {
   const [groupData, setGroupData] = useState([]);
   const [messageWait, setMessageWait] = useState(false);
 
-  const contractAddress = "0x5B9D37FD5E08cF0faDF1D4371ED547365194CFe3";
+  const contractAddress = "0xc787Df672A994D1960D70ee977387187E7164D39";
 
   const checkIfWalletIsConnect = async () => {
     try {
@@ -32,10 +32,6 @@ function App() {
         const account = accounts[0];
         console.log("Found account", account);
         setAccount(account);
-        // Get Message DB
-        getAllMessage();
-        // Get Group DB
-        getAllGroups();
       } else {
         console.log("Nothing found");
       }
@@ -59,10 +55,6 @@ function App() {
 
       console.log(accounts);
       setAccount(accounts[0]);
-      // Get Message DB
-      getAllMessage();
-      // Get Group DB
-      getAllGroups();
     } catch (error) {
       console.log(error);
     }
@@ -97,38 +89,6 @@ function App() {
     }
 
     console.log("Group created");
-  };
-
-  const getAllGroups = async () => {
-    try {
-      const { ethereum } = window;
-
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const PdeXContract = new ethers.Contract(
-          contractAddress,
-          abi.abi,
-          signer
-        );
-
-        let data = await PdeXContract.getAllGroups();
-
-        let cleanData = [];
-        data.forEach((item) => {
-          console.log(item);
-          cleanData.push({
-            groupName: item.groupName,
-            groupLogo: item.groupLogo,
-            groupOwner: item.groupOwner,
-          });
-        });
-
-        setGroupData(cleanData);
-      }
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const sendMessage = async (e) => {
@@ -171,36 +131,6 @@ function App() {
     }
   };
 
-  const getAllMessage = async () => {
-    try {
-      const { ethereum } = window;
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const PdeXContract = new ethers.Contract(
-          contractAddress,
-          abi.abi,
-          signer
-        );
-
-        let data = await PdeXContract.getAllMessages();
-
-        // console.log(`There is ${data.length}, something like: ${data}`);
-
-        let cleanMessages = [];
-        data.forEach((item) => {
-          cleanMessages.push({
-            message: item.message,
-            address: item.owner,
-          });
-        });
-        setMessageData(cleanMessages);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     checkIfWalletIsConnect();
   }, []);
@@ -222,17 +152,31 @@ function App() {
       ]);
     };
 
+    const onGroup = (groupName, groupLogo, from) => {
+      console.log("newGroup", groupName, groupLogo, from);
+      setGroupData((prevState) => [
+        ...prevState,
+        {
+          groupName: groupName,
+          groupLogo: groupLogo,
+          groupOwner: from,
+        },
+      ]);
+    };
+
     if (window.ethereum) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
 
       PdexContract = new ethers.Contract(contractAddress, abi.abi, signer);
       PdexContract.on("newMessage", onMessage);
+      PdexContract.on("newGroup", onGroup);
     }
 
     return () => {
       if (PdexContract) {
         PdexContract.off("newMessage", onMessage);
+        PdexContract.off("newGroup", onGroup);
       }
     };
   }, []);
