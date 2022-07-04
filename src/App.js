@@ -10,9 +10,10 @@ function App() {
   const [groupLogo, setGroupLogo] = useState("");
   const [message, setMessage] = useState();
   const [messageData, setMessageData] = useState([]);
+  const [groupData, setGroupData] = useState([]);
   const [messageWait, setMessageWait] = useState(false);
 
-  const contractAddress = "0xC10D144F8cC989Be41cCC99E160F6713E9130301";
+  const contractAddress = "0x5B9D37FD5E08cF0faDF1D4371ED547365194CFe3";
 
   const checkIfWalletIsConnect = async () => {
     try {
@@ -33,6 +34,9 @@ function App() {
         setAccount(account);
         // Get Message DB
         getAllMessage();
+        // Get Group DB
+        getAllGroups();
+        console.log(groupData);
       } else {
         console.log("Nothing found");
       }
@@ -57,14 +61,74 @@ function App() {
       console.log(accounts);
       setAccount(accounts[0]);
       getAllMessage();
+      getAllGroups();
+      console.log(groupData);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const createGroup = (e) => {
+  const createGroup = async (e) => {
     e.preventDefault();
+
+    try {
+      const { ethereum } = window;
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const PdeXContract = new ethers.Contract(
+          contractAddress,
+          abi.abi,
+          signer
+        );
+
+        let deGroup = await PdeXContract.createGroup(groupName, groupLogo);
+
+        setMessageWait(true);
+        await deGroup.wait();
+        setMessageWait(false);
+
+        setGroupName("");
+        setGroupLogo("");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
     console.log("Group created");
+  };
+
+  const getAllGroups = async () => {
+    try {
+      const { ethereum } = window;
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const PdeXContract = new ethers.Contract(
+          contractAddress,
+          abi.abi,
+          signer
+        );
+
+        let data = await PdeXContract.getAllGroups();
+
+        let cleanData = [];
+        data.forEach((item) => {
+          console.log(item);
+          cleanData.push({
+            groupName: item.groupName,
+            groupLogo: item.groupLogo,
+            groupOwner: item.groupOwner,
+          });
+        });
+
+        setGroupData(cleanData);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const sendMessage = async (e) => {
@@ -159,30 +223,21 @@ function App() {
             <div className="container">
               <h2 className="groupHeadings">List of Groups</h2>
               <ul>
-                <li>
-                  <div className="group">
-                    <div className="groupImgContainer">
-                      <img src="https://via.placeholder.com/100" />
-                    </div>
-                    <h5>Group 1</h5>
-                  </div>
-                </li>
-                <li>
-                  <div className="group">
-                    <div className="groupImgContainer">
-                      <img src="https://via.placeholder.com/100" />
-                    </div>
-                    <h5>Group 2</h5>
-                  </div>
-                </li>
-                <li>
-                  <div className="group">
-                    <div className="groupImgContainer">
-                      <img src="https://via.placeholder.com/100" />
-                    </div>
-                    <h5>Group 3</h5>
-                  </div>
-                </li>
+                {groupData.length > 0 ? (
+                  groupData.map((item, index) => (
+                    <li key={index}>
+                      <div className="group">
+                        <div className="groupImgContainer">
+                          <img src={item.groupLogo} />
+                        </div>
+                        <h5>{item.groupName}</h5>
+                        <h6>Owner: {item.groupOwner}</h6>
+                      </div>
+                    </li>
+                  ))
+                ) : (
+                  <p>There are no groups</p>
+                )}
               </ul>
               <h2 className="groupHeadings">CreateGroup</h2>
               <form>
