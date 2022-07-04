@@ -83,8 +83,10 @@ function App() {
 
         let deMessage = await PdeXContract.createMessage(message);
         console.log("waiting");
+        setMessageWait(true);
         await deMessage.wait();
         console.log("Done");
+        setMessageWait(false);
 
         console.log("Message sent");
         setMessage("");
@@ -218,8 +220,8 @@ function App() {
               <h2 className="groupHeadings">List of Messages</h2>
               <ul>
                 {messageData.length > 0
-                  ? messageData.map((item) => (
-                      <li>
+                  ? messageData.map((item, index) => (
+                      <li key={index}>
                         {item.message} <span>{item.address}</span>
                       </li>
                     ))
@@ -236,7 +238,7 @@ function App() {
                     onChange={onChange}
                   ></textarea>
                 ) : (
-                  "Waiting"
+                  <p>waiting for the network</p>
                 )}
 
                 <button onClick={sendMessage}>Send Message</button>
